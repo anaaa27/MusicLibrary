@@ -2,13 +2,7 @@
 
 *The FCPL lab runs as **SharpQuest**, the quest to learn C#. That's why the tooling and some code say SharpQuest.*
 
-> **Edit this section in session 1.** It's your first commit.
->
-> **Theme:** _which of the catalogue themes you picked_
-> **In one sentence:** _what your app will do by January_
-> **Route:** _guided or project_
->
-> Don't write your name or your avatar here. The scoreboard is anonymous, and this file is how people would find out.
+Music Library
 
 ---
 
