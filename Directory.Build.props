@@ -1,0 +1,21 @@
+<!--
+  Settings shared by every project in this repository.
+  MANAGED FILE: `sq update` and CI replace it with the official copy.
+-->
+<Project>
+  <PropertyGroup>
+    <!--
+      .NET 9, because that is what the lab PCs have. A .NET 10 SDK builds it just as well.
+      C# 13 for everyone, whichever SDK you have: code that builds on your laptop also builds
+      on a lab PC and on GitHub, where your Contract score is read.
+    -->
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>13</LangVersion>
+    <!-- No .NET 9 runtime on your laptop, only .NET 10? Then everything runs on 10. -->
+    <RollForward>Major</RollForward>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Only matters when sq.cs runs as a single file, as CI does with dotnet run and the file option: no native compiler download. -->
+    <PublishAot>false</PublishAot>
+  </PropertyGroup>
+</Project>

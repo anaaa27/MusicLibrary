@@ -1,0 +1,7 @@
+{
+  "lab": "03",
+  "project": "tests/Capstone.Tests/Capstone.Tests.csproj",
+  "classFilter": "SearchMatcher",
+  "env": "SQ_MUTANT",
+  "mutants": 8
+}

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnet-ef": {
+      "version": "9.0.20",
+      "commands": [
+        "dotnet-ef"
+      ],
+      "rollForward": true
+    },
+    "ilspycmd": {
+      "version": "9.1.0.7988",
+      "commands": [
+        "ilspycmd"
+      ],
+      "rollForward": true
+    }
+  }
+}
