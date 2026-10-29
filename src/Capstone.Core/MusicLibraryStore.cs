@@ -1,9 +1,9 @@
+using System.Collections;
 using SharpQuest.Contracts;
 
 namespace Capstone.Core;
 
-
-public class MusicLibraryStore : IItemStore
+public class MusicLibraryStore : IItemStore, IEnumerable<IItem>
 {
     private readonly List<IItem> _items = [];
 
@@ -15,14 +15,12 @@ public class MusicLibraryStore : IItemStore
 
         if (_items.Any(i => string.Equals(i.Id, item.Id, StringComparison.Ordinal)))
             throw new ArgumentException($"An item with Id '{item.Id}' already exists.", nameof(item));
-
         _items.Add(item);
     }
 
     public IItem? FindById(string id)
     {
         if (id is null) return null;
-
         return _items.Find(i => string.Equals(i.Id, id, StringComparison.Ordinal));
     }
 
@@ -34,11 +32,37 @@ public class MusicLibraryStore : IItemStore
     public bool Remove(string id)
     {
         if (id is null) return false;
-
         var index = _items.FindIndex(i => string.Equals(i.Id, id, StringComparison.Ordinal));
         if (index < 0) return false;
-
         _items.RemoveAt(index);
         return true;
+    }
+
+    
+    public IItem this[int index] => _items[index];
+
+    public IItem? this[string id] => string.IsNullOrWhiteSpace(id) ? null : FindById(id);
+
+    public IEnumerator<IItem> GetEnumerator()
+    {
+        foreach (var item in _items)
+        {
+            yield return item;
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    public IEnumerable<IItem> Matching(string query)
+    {
+        query ??= string.Empty;
+
+        foreach (var item in _items)
+        {
+            if (item.DisplayName.Contains(query, StringComparison.OrdinalIgnoreCase))
+            {
+                yield return item;
+            }
+        }
     }
 }
