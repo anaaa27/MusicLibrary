@@ -123,3 +123,83 @@ foreach (var recent in recentHistory)
 {
     Console.WriteLine($"  * In Buffer: \"{recent.DisplayName}\"");
 }
+
+//LAB7
+Console.WriteLine("\n 5. Testing Lab 07 LINQ Queries");
+var lab07 = new Lab07Wiring();
+
+
+var lazyNames = lab07.Names(store);
+Console.WriteLine($"[Names] Deferred count: {lazyNames.Count()}");
+
+
+Console.WriteLine("[Sorted] Items in alphabetical order:");
+foreach (var item in lab07.Sorted(store))
+{
+    Console.WriteLine($"  * {item.DisplayName} ({item.Id})");
+}
+
+Console.WriteLine("[Longest(2)] Top 2 longest display names:");
+foreach (var item in store.Longest(2))
+{
+    Console.WriteLine($"  * {item.DisplayName} ({item.DisplayName.Length} chars)");
+}
+
+var stats = lab07.Summary(store);
+Console.WriteLine($"[Summary] {stats}");
+
+//Queries
+Console.WriteLine("\nMusic Library Domain Queries");
+Console.WriteLine($"1. Top artist: {store.TopArtistByTrackCount() ?? "None"}");
+
+Console.WriteLine("2. Minutes per genre:");
+foreach (var (genre, mins) in store.MinutesPerGenre())
+{
+    Console.WriteLine($"   - {genre}: {mins} min");
+}
+
+var longestAlbum = store.LongestStudioAlbum();
+if (longestAlbum is { } album)
+{
+    Console.WriteLine($"3. Longest studio album: \"{album.AlbumTitle}\" ({album.TotalDuration})");
+}
+
+var topDecade = store.TopDecade();
+Console.WriteLine($"4. Dominant decade: {(topDecade.HasValue ? $"{topDecade}s" : "N/A")}");
+
+Console.WriteLine("5. Live performances >= 5 min:");
+foreach (var live in store.LongLivePerformances(TimeSpan.FromMinutes(5)))
+{
+    Console.WriteLine($"   - \"{live.Title}\" at {live.Venue} ({live.Duration})");
+}
+
+
+Console.WriteLine("\n 6. Lab 07 Stretch Task");
+
+Console.WriteLine($"Is store empty? {store.IsEmpty()}");
+Console.WriteLine($"Catalog one-liner: {store.OneLine()}");
+Console.WriteLine($"Total catalog runtime: {store.TotalRuntime()}");
+
+var genreDescriptions = new List<(Genre Genre, string MoodNote)>
+{
+    (Genre.Rock, "High-energy guitar & drums"),
+    (Genre.Jazz, "Improvisational & late-night vibes"),
+    (Genre.Electronic, "Synth-driven & rhythmic")
+};
+
+Console.WriteLine("\n[Join] Tracks matched with genre descriptions:");
+foreach (var line in store.MatchTracksWithGenreNotes(genreDescriptions))
+{
+    Console.WriteLine($"  * {line}");
+}
+
+Console.WriteLine("\n[GroupBy] Tracks grouped by Genre (outer sequence = groups, inner sequence = tracks):");
+var byGenre = store.OfType<PlayableItem>().GroupBy(t => t.Genre);
+foreach (var group in byGenre)
+{
+    Console.WriteLine($"  Genre: {group.Key} ({group.Count()} tracks)");
+    foreach (var track in group)
+    {
+        Console.WriteLine($"    - {track.Title} ({track.Duration})");
+    }
+}
