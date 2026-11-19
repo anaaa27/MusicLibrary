@@ -154,7 +154,7 @@ public class MusicLibraryMap : IItemMapper
         if (dto.Rating is < 1 or > 5)
             return null;
 
-        git add .        return new Track
+        return new Track
         {
             Id = dto.Id,
             Title = title,
