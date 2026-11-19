@@ -3,6 +3,7 @@ using Capstone.Core;
 using Capstone.Core.Models;
 using Capstone.Core.Wiring;
 using SharpQuest.Contracts;
+using Capstone.Core.Storage;
 
 Console.WriteLine("Music Library: Event Pipeline, Indexing & Higher-Order Functions\n");
 
@@ -202,4 +203,30 @@ foreach (var group in byGenre)
     {
         Console.WriteLine($"    - {track.Title} ({track.Duration})");
     }
+}
+
+
+//LAB8
+Console.WriteLine("\nLab8:Async Save & Load");
+string savePath = Path.Combine(AppContext.BaseDirectory, "data", "music-library.json");
+
+await MusicLibraryFile.SaveAsync(store, savePath);
+Console.WriteLine($"Saved {store.All().Count} items atomically to {savePath}");
+
+var reloaded = await MusicLibraryFile.LoadAsync(savePath, () => new Lab02Wiring().CreateStore());
+Console.WriteLine($"Reloaded {reloaded.All().Count} items after restart:");
+foreach (var item in reloaded.All())
+{
+    Console.WriteLine($"  * [{item.GetType().Name}] {item.DisplayName}");
+}
+string emptyPath = Path.Combine(AppContext.BaseDirectory, "data", "empty.json");
+await File.WriteAllTextAsync(emptyPath, "");
+
+try
+{
+    await MusicLibraryFile.LoadAsync(emptyPath, () => new Lab02Wiring().CreateStore());
+}
+catch (InvalidDataException ex)
+{
+    Console.WriteLine($"Error empty file: {ex.Message}");
 }
